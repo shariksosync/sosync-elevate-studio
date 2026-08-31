@@ -246,7 +246,7 @@ function Callbacks() {
               <div>
                 <p className="font-medium">{c.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {c.phone} · {c.preferredTime}
+                  {c.phone} · {c.topic}
                 </p>
               </div>
               <Button size="sm" variant={c.status === "Called" ? "secondary" : "default"} onClick={() => toggleCallback(c.id)}>
