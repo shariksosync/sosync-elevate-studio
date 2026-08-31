@@ -84,6 +84,8 @@ const KEYS = {
   settings: "sosync_settings",
 } as const;
 
+export const ADMIN_SESSION_KEY = "sosync_admin_session";
+
 const DEFAULT_SETTINGS: SiteSettings = {
   phone: CONTACT.phone,
   altPhone: "+91 91724 03714",
