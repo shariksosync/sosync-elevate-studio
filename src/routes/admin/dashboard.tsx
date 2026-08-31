@@ -271,10 +271,8 @@ function Demos() {
           {demos.map((d) => (
             <li key={d.id} className="rounded-lg border border-border p-4">
               <div className="flex flex-wrap justify-between gap-2">
-                <p className="font-medium">
-                  {d.name} · <span className="text-muted-foreground">{d.company}</span>
-                </p>
-                <p className="text-xs text-primary">{d.preferredDate}</p>
+                <p className="font-medium">{d.name}</p>
+                <p className="text-xs text-primary">{d.date}</p>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
                 {d.phone} · {d.email} · {d.service}
