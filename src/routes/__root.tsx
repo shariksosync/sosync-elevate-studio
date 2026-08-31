@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -11,6 +12,19 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SiteProvider, useSite } from "@/components/SiteProvider";
+import { Toaster } from "@/components/ui/sonner";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { MaintenanceModeView } from "@/components/layout/MaintenanceModeView";
+import { FloatingCallbackButton } from "@/components/layout/FloatingCallbackButton";
+import { AIChatbot } from "@/components/layout/AIChatbot";
+import { DemoBookingModal } from "@/components/modals/DemoBookingModal";
+import { ServiceEnquiryModal } from "@/components/modals/ServiceEnquiryModal";
+import { ReferralModal } from "@/components/modals/ReferralModal";
+import { FeedbackModal } from "@/components/modals/FeedbackModal";
+import { CaseStudyModal } from "@/components/modals/CaseStudyModal";
 
 function NotFoundComponent() {
   return (
@@ -77,20 +91,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "SOSync AI Tech — Digital Solutions for a Smarter Tomorrow" },
+      {
+        name: "description",
+        content:
+          "SOSync AI Tech IT Solutions builds websites, ERP software, cloud infrastructure and AI automation for growing businesses.",
+      },
+      { name: "author", content: "SOSync AI Tech IT Solutions" },
+      { property: "og:title", content: "SOSync AI Tech — Digital Solutions for a Smarter Tomorrow" },
+      {
+        property: "og:description",
+        content: "Innovate. Integrate. Elevate. Custom software, ERP and AI automation delivered in 1–3 weeks.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -114,13 +131,39 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SiteShell() {
+  const { settings } = useSite();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname.startsWith("/admin");
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <AnnouncementBar />
+      <Navbar />
+      <main className="flex-1">
+        {settings.maintenanceMode && !isAdmin ? <MaintenanceModeView /> : <Outlet />}
+      </main>
+      <Footer />
+      <FloatingCallbackButton />
+      <AIChatbot />
+      <DemoBookingModal />
+      <ServiceEnquiryModal />
+      <ReferralModal />
+      <FeedbackModal />
+      <CaseStudyModal />
+      <Toaster />
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SiteProvider>
+        <SiteShell />
+      </SiteProvider>
     </QueryClientProvider>
   );
 }
